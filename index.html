@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNEAKES TRIPLE B </title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+       
+    </style>
+</head>
+<body>
+
+    <!-- MARQUEE -->
+    <div class="marquee">
+        <div class="marquee__inner">
+            <h1>envíos a todo el salvador</h1>
+            <h1>envíos a todo el salvador</h1>
+            <h1>envíos a todo el salvador</h1>
+            <h1>envíos a todo el salvador</h1>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container">
+            <div class="nav">
+                <a href="#" class="logo" id="logo-secreto">SNEAKES TRIPLE B</a>
+
+                <div class="glass" id="secretBtn">
+                    <img src="crown-king-drawn-free-vector-removebg-preview.png" alt="corona" style="height: 52px;">
+                </div>
+
+                <button class="cart-btn" id="open-cart">🛒 Carrito (<span id="cart-count">0</span>)</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <div class="container">
+        <h1 class="productos-titulo"> Nuestros zapatos </h1>
+
+        <!-- LISTA DE PRODUCTOS (se llena con JS) -->
+        <div class="products" id="product-list"></div>
+
+        <!-- DETALLE DE PRODUCTO (oculto inicialmente) -->
+        <div class="product-detail" id="product-detail">
+            <div class="detail-container">
+                <div class="detail-images">
+                    <div class="main-image">
+                        <img id="detail-main-img" src="" alt="">
+                    </div>
+                    <div class="thumbnail-list" id="thumbnail-list"></div>
+                </div>
+
+                <div class="detail-info">
+                    <h2 id="detail-title"></h2>
+                    <div class="product-price" id="detail-price"></div>
+                    <p id="detail-description"></p>
+
+                    <div class="product-options">
+                        <label for="quantity">Cantidad:</label>
+                        <select id="quantity">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+
+                    <div class="product-actions-detail">
+                        <button id="add-to-cart-detail">Agregar al carrito</button>
+                        <span class="back-btn" id="back-btn">← Volver</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Productos relacionados -->
+            <div class="related-products">
+                <div class="title">Productos similares</div>
+                <div class="listProduct" id="related-products"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ZOOM IMAGEN -->
+    <div id="image-modal" class="image-modal">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="img-modal-view">
+    </div>
+
+    <!-- CARRITO MODAL -->
+    <div class="overlay" id="overlay"></div>
+    <div class="cart-modal" id="cart-modal">
+        <span class="close-cart" id="close-cart">&times;</span>
+        <h2>Tu Carrito</h2>
+        <div id="cart-items"></div>
+        <div class="cart-total">Total: <span id="cart-total">$0.00</span></div>
+        <button class="checkout-btn" id="checkout-btn">Proceder al pago</button>
+    </div>
+
+   
+    <!-- FOOTER -->
+    <style>
+   .footer {
+            background: rgb(218, 192, 49);
+            padding: 45px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+ 
+.footer {
+    background: rgb(218, 192, 49);
+    padding: 30px 0;
+    text-align: center;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+}
+
+.footer img {
+    height: 160px;
+    margin-bottom: 10px;
+}
+
+.footer p {
+    margin: 0;
+    font-size: 14px;
+    color: #222;
+    font-family: system-ui, sans-serif;
+}
+
+   
+</style>
+<footer class="footer">
+  <div class="footer-container">
+
+     <footer class="footer">
+    <img src="WhatsApp_Image_2026-01-28_at_9.14.13_PM-removebg-preview.png" alt="Jewel Shoes">
+    <p>&copy; 2026 SNEAKES TRIPLE B · Todos los derechos reservados</p>
+</footer>
+
+   
+<script>
+    // --------------------------------------------------------------
+    // BASE DE DATOS DE PRODUCTOS CON OFERTAS
+    // --------------------------------------------------------------
+    const products = {
+        1: { 
+            id: 1, 
+            name: "fila", 
+            price: 22.00, 
+            oldPrice: 35.00, 
+            image: "venta/fila.jpg", 
+            additionalImages: ["venta/fil2.jpg", "venta/fil3.jpg"], 
+            description: "talla 38 - ANTES $15.00, AHORA $10.00" 
+        },
+        2: { 
+            id: 2, 
+            name: "air max", 
+            price: 22.00, 
+            oldPrice: 28.00, 
+            image: "venta/t1.jpg", 
+            additionalImages: ["venta/t3.jpg", "venta/t2.jpg", "venta/t4.jpg"], 
+            description: "talla 37 - OFERTA ESPECIAL 40% DESCUENTO" 
+        },
+        3: { 
+            id: 3, 
+            name: "adidas", 
+            price: 22.00, 
+            image: "venta/a1.jpg", 
+            additionalImages: ["venta/a2.jpg", "venta/a3.jpg"], 
+            description: "talla 35 - PRECIO REGULAR" 
+        },
+
+        4: { 
+            id: 4, 
+            name: "NB", 
+            price: 25.00, 
+            oldPrice: 22.00, 
+            image: "venta/n1.jpg", 
+            additionalImages: ["venta/n2.jpg", "venta/n3.jpg"], 
+            description: "talla 36 - DE $22.00 A SOLO $13.50" 
+        },
+
+        5: { 
+            id: 5, 
+            name: "campos", 
+            price: 20.50, 
+            oldPrice: 27.00, 
+            image: "venta/cam.jpg", 
+         
+            description: "talla 35 a 40 - disponibles" 
+        }
+
+
+
+
+    };
+
+    // --------------------------------------------------------------
+    // LÓGICA DE CARRITO Y VISTAS
+    // --------------------------------------------------------------
+    let cart = [];
+    let currentProductId = null;
+
+    // Elementos DOM
+    const productListEl = document.getElementById('product-list');
+    const productDetailEl = document.getElementById('product-detail');
+    const cartModal = document.getElementById('cart-modal');
+    const overlay = document.getElementById('overlay');
+    const openCartBtn = document.getElementById('open-cart');
+    const closeCartBtn = document.getElementById('close-cart');
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartTotalSpan = document.getElementById('cart-total');
+    const cartCountSpan = document.getElementById('cart-count');
+    const backBtn = document.getElementById('back-btn');
+    const checkoutBtn = document.getElementById('checkout-btn');
+    const relatedContainer = document.getElementById('related-products');
+    const modal = document.getElementById("image-modal");
+    const modalImg = document.getElementById("img-modal-view");
+    const closeModal = document.querySelector(".close-modal");
+    const mainImg = document.getElementById("detail-main-img");
+
+    // --------------------------------------------------------------
+    // FUNCIÓN PARA RENDERIZAR PRODUCTOS (CON OFERTAS)
+    // --------------------------------------------------------------
+    function renderProducts() {
+        productListEl.innerHTML = '';
+        Object.values(products).forEach(product => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.setAttribute('data-id', product.id);
+            
+            // Calcular descuento si existe oldPrice
+            let discountHtml = '';
+            let priceHtml = `<div class="product-price">$${product.price.toFixed(2)}</div>`;
+            
+            if (product.oldPrice && product.oldPrice > product.price) {
+                const discount = Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100);
+                discountHtml = `<div class="discount-ribbon">-${discount}%</div>`;
+                priceHtml = `
+                    <div class="product-price-container">
+                        <span class="current-price">$${product.price.toFixed(2)}</span>
+                        <span class="old-price">$${product.oldPrice.toFixed(2)}</span>
+                        <span class="discount-badge">-${discount}%</span>
+                    </div>
+                `;
+            }
+            
+            card.innerHTML = `
+                <div class="product-image">
+                    <img src="${product.image}" alt="${product.name}" loading="lazy">
+                    ${discountHtml}
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">${product.name}</h3>
+                    ${priceHtml}
+                    <div class="product-actions">
+                        <button class="add-to-cart">Agregar</button>
+                        <button class="view-details">Ver más</button>
+                    </div>
+                </div>
+            `;
+            productListEl.appendChild(card);
+        });
+    }
+
+    // --------------------------------------------------------------
+    // FUNCIÓN PARA MOSTAR DETALLE DEL PRODUCTO (CON OFERTAS)
+    // --------------------------------------------------------------
+    function showProductDetail(productId) {
+        const p = products[productId];
+        if (!p) return;
+        currentProductId = productId;
+        
+        document.getElementById('detail-title').textContent = p.name;
+        
+        // Precio con oferta en detalle
+        const detailPrice = document.getElementById('detail-price');
+        if (p.oldPrice && p.oldPrice > p.price) {
+            const discount = Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100);
+            const savings = (p.oldPrice - p.price).toFixed(2);
+            detailPrice.innerHTML = `
+                <div class="detail-price-container">
+                    <span class="detail-current-price">$${p.price.toFixed(2)}</span>
+                    <span class="detail-old-price">$${p.oldPrice.toFixed(2)}</span>
+                    <span class="detail-discount-badge">-${discount}%</span>
+                </div>
+                <div class="savings-badge">¡Ahorras $${savings}!</div>
+            `;
+        } else {
+            detailPrice.innerHTML = `<span class="detail-current-price">$${p.price.toFixed(2)}</span>`;
+        }
+        
+        document.getElementById('detail-description').textContent = p.description;
+        document.getElementById('detail-main-img').src = p.image;
+
+        // Miniaturas
+        const thumbList = document.getElementById('thumbnail-list');
+        thumbList.innerHTML = '';
+        const allImgs = [p.image, ...(p.additionalImages || [])];
+        allImgs.forEach((src, idx) => {
+            const thumb = document.createElement('img');
+            thumb.src = src;
+            thumb.className = `gallery-thumbnail ${idx === 0 ? 'active' : ''}`;
+            thumb.addEventListener('click', () => {
+                document.getElementById('detail-main-img').src = src;
+                document.querySelectorAll('.gallery-thumbnail').forEach(t => t.classList.remove('active'));
+                thumb.classList.add('active');
+            });
+            thumbList.appendChild(thumb);
+        });
+
+        // Botón agregar
+        document.getElementById('add-to-cart-detail').onclick = () => {
+            const qty = parseInt(document.getElementById('quantity').value);
+            addToCart(productId, qty);
+        };
+
+        showRelatedProducts(productId);
+        productListEl.style.display = 'none';
+        productDetailEl.style.display = 'block';
+    }
+
+    // --------------------------------------------------------------
+    // FUNCIÓN PARA MOSTRAR PRODUCTOS RELACIONADOS (CON OFERTAS)
+    // --------------------------------------------------------------
+    function showRelatedProducts(currentId) {
+        relatedContainer.innerHTML = '';
+        const others = Object.values(products).filter(p => p.id != currentId).sort(() => 0.5 - Math.random()).slice(0, 4);
+        others.forEach(p => {
+            const a = document.createElement('a');
+            a.href = '#';
+            a.className = 'item';
+            
+            let priceHtml = `<div>$${p.price.toFixed(2)}</div>`;
+            if (p.oldPrice && p.oldPrice > p.price) {
+                const discount = Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100);
+                priceHtml = `
+                    <div>
+                        <span style="color:#e44d26; font-weight:bold;">$${p.price.toFixed(2)}</span>
+                        <span style="color:#999; text-decoration:line-through; font-size:0.8rem; margin-left:5px;">$${p.oldPrice.toFixed(2)}</span>
+                        <span style="background:#ff4444; color:white; padding:2px 5px; border-radius:10px; font-size:0.7rem; margin-left:5px;">-${discount}%</span>
+                    </div>
+                `;
+            }
+            
+            a.innerHTML = `
+                <img src="${p.image}" alt="">
+                <h2>${p.name}</h2>
+                ${priceHtml}
+            `;
+            a.addEventListener('click', (e) => { 
+                e.preventDefault(); 
+                showProductDetail(p.id); 
+            });
+            relatedContainer.appendChild(a);
+        });
+    }
+
+    // --------------------------------------------------------------
+    // FUNCIONES DEL CARRITO
+    // --------------------------------------------------------------
+    function addToCart(id, qty = 1) {
+        const prod = products[id];
+        const exist = cart.find(item => item.id === id);
+        
+        // Guardamos también el oldPrice si existe para referencia
+        const itemToAdd = { 
+            ...prod, 
+            quantity: qty,
+            originalPrice: prod.oldPrice || prod.price
+        };
+        
+        if (exist) {
+            exist.quantity += qty;
+        } else {
+            cart.push(itemToAdd);
+        }
+        updateCart();
+        notificar(`Añadido ${qty} ${prod.name}${prod.oldPrice ? ' en oferta' : ''}`);
+    }
+
+    function removeFromCart(id) {
+        cart = cart.filter(i => i.id !== id);
+        updateCart();
+    }
+
+    function updateQuantity(id, delta) {
+        const item = cart.find(i => i.id === id);
+        if (item) {
+            item.quantity += delta;
+            if (item.quantity <= 0) removeFromCart(id);
+            else updateCart();
+        }
+    }
+
+    function updateCart() {
+        cartItemsContainer.innerHTML = '';
+        let total = 0;
+        if (cart.length === 0) {
+            cartItemsContainer.innerHTML = '<div class="empty-cart">Carrito vacío</div>';
+        } else {
+            cart.forEach(item => {
+                total += item.price * item.quantity;
+                const div = document.createElement('div');
+                div.className = 'cart-item';
+                
+                // Mostrar si está en oferta en el carrito
+                const priceDisplay = item.oldPrice ? 
+                    `<div>
+                        <span class="cart-item-price">$${item.price.toFixed(2)}</span>
+                        <span style="color:#999; text-decoration:line-through; font-size:0.8rem; margin-left:5px;">$${item.oldPrice.toFixed(2)}</span>
+                    </div>` : 
+                    `<div class="cart-item-price">$${item.price.toFixed(2)}</div>`;
+                
+                div.innerHTML = `
+                    <div class="cart-item-image"><img src="${item.image}"></div>
+                    <div class="cart-item-info">
+                        <div class="cart-item-title">${item.name}</div>
+                        ${priceDisplay}
+                        <div class="cart-item-actions">
+                            <button class="quantity-btn minus" data-id="${item.id}">-</button>
+                            <span>${item.quantity}</span>
+                            <button class="quantity-btn plus" data-id="${item.id}">+</button>
+                        </div>
+                        <button class="remove-item" data-id="${item.id}">Eliminar</button>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(div);
+            });
+        }
+        cartTotalSpan.textContent = `$${total.toFixed(2)}`;
+        cartCountSpan.textContent = cart.reduce((acc, i) => acc + i.quantity, 0);
+
+        // Eventos
+        document.querySelectorAll('.remove-item').forEach(btn => {
+            btn.addEventListener('click', e => removeFromCart(parseInt(e.target.dataset.id)));
+        });
+        document.querySelectorAll('.quantity-btn.minus').forEach(btn => {
+            btn.addEventListener('click', e => updateQuantity(parseInt(e.target.dataset.id), -1));
+        });
+        document.querySelectorAll('.quantity-btn.plus').forEach(btn => {
+            btn.addEventListener('click', e => updateQuantity(parseInt(e.target.dataset.id), 1));
+        });
+    }
+
+    function notificar(texto) {
+        const noti = document.createElement('div');
+        noti.style = 'position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:#2ecc71; color:white; padding:12px 24px; border-radius:50px; z-index:999; box-shadow:0 5px 15px rgba(0,0,0,0.3);';
+        noti.textContent = texto;
+        document.body.appendChild(noti);
+        setTimeout(() => noti.remove(), 2000);
+    }
+
+    // --------------------------------------------------------------
+    // EVENTOS
+    // --------------------------------------------------------------
+    
+    // Eventos grid de productos
+    productListEl.addEventListener('click', (e) => {
+        const card = e.target.closest('.product-card');
+        if (!card) return;
+        const id = parseInt(card.dataset.id);
+        if (e.target.classList.contains('add-to-cart')) {
+            e.stopPropagation();
+            addToCart(id, 1);
+        } else if (e.target.classList.contains('view-details')) {
+            e.stopPropagation();
+            showProductDetail(id);
+        } else {
+            showProductDetail(id);
+        }
+    });
+
+    // Volver a la lista de productos
+    backBtn.addEventListener('click', () => {
+        productDetailEl.style.display = 'none';
+        productListEl.style.display = 'grid';
+    });
+
+    // Carrito UI
+    openCartBtn.addEventListener('click', () => {
+        cartModal.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+
+    function closeCart() {
+        cartModal.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    
+    closeCartBtn.addEventListener('click', closeCart);
+    overlay.addEventListener('click', closeCart);
+
+    // Checkout - Redirigir a página de checkout
+    checkoutBtn.addEventListener('click', () => {
+        if (cart.length === 0) {
+            alert('Tu carrito está vacío');
+            return;
+        }
+        
+        // Guardar el carrito en sessionStorage para pasarlo a la página de checkout
+        sessionStorage.setItem('checkoutCart', JSON.stringify(cart));
+        
+        // Redirigir a la página de checkout
+        window.location.href = 'checkout.html';
+    });
+
+    // Modal zoom de imagen
+    mainImg.addEventListener('click', () => {
+        if (mainImg.src) {
+            modal.style.display = "block";
+            modalImg.src = mainImg.src;
+        }
+    });
+    
+    closeModal.addEventListener('click', () => modal.style.display = "none");
+    window.addEventListener('click', e => { if (e.target === modal) modal.style.display = "none"; });
+
+    // --------------------------------------------------------------
+    // EASTER EGGS (Secretos)
+    // --------------------------------------------------------------
+    
+    // Secreto del logo
+    const logo = document.getElementById('logo-secreto');
+    let clickCount = 0, timer;
+    logo.addEventListener('click', (e) => {
+        e.preventDefault();
+        clearTimeout(timer);
+        clickCount++;
+        if (clickCount >= 5) {
+            window.location.href = "secreto.html";
+        }
+        timer = setTimeout(() => clickCount = 0, 2000);
+    });
+
+    // Secreto de la corona
+    const secretBtn = document.getElementById('secretBtn');
+    let taps = 0;
+    secretBtn.addEventListener('click', () => {
+        taps++;
+        if (taps === 5) window.location.href = "pagina-secreta.html";
+        setTimeout(() => taps = 0, 3000);
+    });
+
+    // --------------------------------------------------------------
+    // INICIALIZAR
+    // --------------------------------------------------------------
+    renderProducts();
+    updateCart();
+</script>
+</body>
+</html>

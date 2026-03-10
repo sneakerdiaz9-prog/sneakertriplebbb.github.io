@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - SNEAKES TRIPLE B</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .marquee {
+            width: 100%;
+            overflow: hidden;
+            background: #003049;
+        }
+
+        .marquee__inner {
+            display: flex;
+            width: max-content;
+            animation: marquee 12s linear infinite;
+        }
+
+        .marquee__inner h1 {
+            font-size: clamp(2.8rem, 6vw, 4rem);
+            text-transform: uppercase;
+            color: transparent;
+            -webkit-text-stroke: 1px #fff;
+            white-space: nowrap;
+            padding: 0 4rem;
+            letter-spacing: 2px;
+        }
+
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        .header {
+            background: rgb(218, 192, 49);
+            padding: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 900;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .back-btn {
+            background: #1f93b6;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #0e6a8a;
+        }
+
+        .checkout-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 40px 0;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .resumen-pedido {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            height: fit-content;
+        }
+
+        .resumen-pedido h2 {
+            margin-bottom: 25px;
+            color: #222;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+
+        .productos-resumen {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .item-resumen {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .item-resumen img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .item-resumen-info {
+            flex: 1;
+        }
+
+        .item-resumen-nombre {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .item-resumen-precio {
+            color: #e44d26;
+            font-weight: bold;
+        }
+
+        .item-resumen-cantidad {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .total-resumen {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .formulario-checkout {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .formulario-checkout h2 {
+            margin-bottom: 25px;
+            color: #222;
+        }
+
+        .campo-formulario {
+            margin-bottom: 25px;
+        }
+
+        .campo-formulario label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .campo-formulario input,
+        .campo-formulario textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        .campo-formulario input:focus,
+        .campo-formulario textarea:focus {
+            outline: none;
+            border-color: #25d366;
+        }
+
+        .campo-formulario input.error,
+        .campo-formulario textarea.error {
+            border-color: #ff4444;
+        }
+
+        .mensaje-error {
+            color: #ff4444;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .campo-formulario.error .mensaje-error {
+            display: block;
+        }
+
+        .opciones-contacto {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .opcion-contacto {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .opcion-contacto.active {
+            border-color: #25d366;
+            background: #f0f9f0;
+        }
+
+        .opcion-contacto i {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .opcion-contacto.whatsapp i { color: #25d366; }
+        .opcion-contacto.telefono i { color: #1f93b6; }
+
+        .btn-enviar {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 18px 30px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-enviar:hover {
+            background: #128C7E;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-enviar i {
+            font-size: 1.5rem;
+        }
+
+        .notificacion {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            display: none;
+            animation: slideIn 0.3s;
+            z-index: 1000;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .notificacion.whatsapp { border-left: 5px solid #25d366; }
+        .notificacion.error { border-left: 5px solid #ff4444; }
+
+        .notificacion-contenido {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notificacion i {
+            font-size: 24px;
+        }
+
+        .notificacion.whatsapp i { color: #25d366; }
+        .notificacion.error i { color: #ff4444; }
+
+        .detalle-pedido-preview {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            border: 1px solid #e0e0e0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .detalle-pedido-preview p {
+            margin-bottom: 5px;
+            white-space: pre-line;
+        }
+    </style>
+</head>
+<body>
+    <div class="marquee">
+        <div class="marquee__inner">
+            <h1>checkout - finaliza tu compra</h1>
+            <h1>checkout - finaliza tu compra</h1>
+            <h1>checkout - finaliza tu compra</h1>
+            <h1>checkout - finaliza tu compra</h1>
+        </div>
+    </div>
+
+    <header class="header">
+        <div class="container">
+            <div class="nav">
+                <a href="index.html" class="logo">SNEAKES TRIPLE B</a>
+                <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Seguir comprando</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="checkout-container">
+            <!-- Resumen del pedido -->
+            <div class="resumen-pedido">
+                <h2>📦 Resumen del pedido</h2>
+                <div class="productos-resumen" id="productos-resumen"></div>
+                <div class="total-resumen" id="total-resumen">Total: $0.00</div>
+            </div>
+
+            <!-- Formulario de checkout -->
+            <div class="formulario-checkout">
+                <h2>📝 Completar pedido</h2>
+                
+                <div class="opciones-contacto">
+                    <div class="opcion-contacto whatsapp active" id="opcion-whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                        <div>WhatsApp</div>
+                    </div>
+                 
+                </div>
+
+                <div class="campo-formulario" id="campo-nombre">
+                    <label>Nombre completo *</label>
+                    <input type="text" id="nombre" placeholder="Ej: Juan Pérez" value="Cliente SNEAKES">
+                    <div class="mensaje-error">Por favor ingresa tu nombre</div>
+                </div>
+
+                <div class="campo-formulario" id="campo-telefono">
+                    <label>Teléfono / WhatsApp *</label>
+                    <input type="tel" id="telefono" placeholder="Ej: 78590128" value="78590128">
+                    <div class="mensaje-error">Por favor ingresa un teléfono válido</div>
+                    <small style="color: #666; display: block; margin-top: 5px;">Formato: 78590128 (sin espacios ni guiones)</small>
+                </div>
+
+                <div class="campo-formulario">
+                    <label>Dirección de entrega (opcional)</label>
+                    <textarea id="direccion" rows="2" placeholder="Ej: Colonia Escalón, Calle Principal #123"></textarea>
+                </div>
+
+               
+
+                <!-- Vista previa del mensaje -->
+                <div class="detalle-pedido-preview" id="preview-mensaje">
+                    <p><strong>Vista previa del mensaje:</strong></p>
+                </div>
+
+                <button class="btn-enviar" id="btn-enviar-pedido">
+                    <i class="fab fa-whatsapp"></i>
+                    Enviar pedido por WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificación flotante -->
+    <div class="notificacion" id="notificacion">
+        <div class="notificacion-contenido">
+            <i class="fab fa-whatsapp"></i>
+            <div>
+                <strong>¡Pedido enviado!</strong>
+                <p style="font-size: 0.9rem; margin-top: 5px;">Serás redirigido a WhatsApp</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    
+   const NUMERO_NEGOCIO = "50378811237";
+
+    let cart = [];
+    try {
+        const savedCart = sessionStorage.getItem('checkoutCart');
+        if (savedCart) {
+            cart = JSON.parse(savedCart);
+        }
+    } catch (e) {
+        console.error('Error al cargar el carrito:', e);
+    }
+
+    if (cart.length === 0) {
+        window.location.href = 'index.html';
+    }
+
+    const productosResumen = document.getElementById('productos-resumen');
+    const totalResumen = document.getElementById('total-resumen');
+    const campoNombre = document.getElementById('campo-nombre');
+    const campoTelefono = document.getElementById('campo-telefono');
+    const inputNombre = document.getElementById('nombre');
+    const inputTelefono = document.getElementById('telefono');
+    const inputDireccion = document.getElementById('direccion');
+    const btnEnviar = document.getElementById('btn-enviar-pedido');
+    const previewMensaje = document.getElementById('preview-mensaje');
+
+    function formatearTelefono(telefono) {
+        return telefono.replace(/[\s\-\(\)]/g, '');
+    }
+
+    function validarTelefono(telefono) {
+        const telLimpio = formatearTelefono(telefono);
+        return /^\d{8,15}$/.test(telLimpio);
+    }
+
+    function validarNombre(nombre) {
+        return nombre.trim().length >= 2;
+    }
+
+    function actualizarPreview() {
+        const items = cart.map(item =>
+            `• ${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}`
+        ).join('\n');
+
+        const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+        const nombre = inputNombre.value.trim() || 'Cliente';
+        const telefono = formatearTelefono(inputTelefono.value.trim()) || 'No especificado';
+        const direccion = inputDireccion.value.trim() || 'No especificada';
+
+        const preview =
+            `🛍️ *NUEVO PEDIDO - SNEAKES TRIPLE B*\n\n` +
+            `👤 *Cliente:* ${nombre}\n` +
+            `📱 *Contacto:* ${telefono}\n` +
+            `📍 *Dirección:* ${direccion}\n\n` +
+            `🛒 *PRODUCTOS:*\n${items}\n\n` +
+            `💰 *TOTAL: $${total.toFixed(2)}*`;
+
+        previewMensaje.innerHTML =
+            `<p><strong>Vista previa del mensaje:</strong><br><br>${preview.replace(/\n/g, '<br>')}</p>`;
+    }
+
+    function renderizarResumen() {
+        productosResumen.innerHTML = '';
+        let total = 0;
+
+        cart.forEach(item => {
+            const subtotal = item.price * item.quantity;
+            total += subtotal;
+
+            const itemElement = document.createElement('div');
+            itemElement.className = 'item-resumen';
+            itemElement.innerHTML = `
+                <img src="${item.image || 'https://via.placeholder.com/70'}">
+                <div class="item-resumen-info">
+                    <div class="item-resumen-nombre">${item.name}</div>
+                    <div class="item-resumen-precio">$${item.price.toFixed(2)}</div>
+                    <div class="item-resumen-cantidad">Cantidad: ${item.quantity}</div>
+                    <div>Subtotal: $${subtotal.toFixed(2)}</div>
+                </div>
+            `;
+            productosResumen.appendChild(itemElement);
+        });
+
+        totalResumen.textContent = `Total: $${total.toFixed(2)}`;
+    }
+
+    inputNombre.addEventListener('input', actualizarPreview);
+    inputTelefono.addEventListener('input', actualizarPreview);
+    inputDireccion.addEventListener('input', actualizarPreview);
+
+    btnEnviar.addEventListener('click', () => {
+
+        let valido = true;
+
+        if (!validarNombre(inputNombre.value)) {
+            campoNombre.classList.add('error');
+            valido = false;
+        } else {
+            campoNombre.classList.remove('error');
+        }
+
+        if (!validarTelefono(inputTelefono.value)) {
+            campoTelefono.classList.add('error');
+            valido = false;
+        } else {
+            campoTelefono.classList.remove('error');
+        }
+
+        if (!valido) return;
+
+        const mensaje =
+            `🛍️ *NUEVO PEDIDO - SNEAKES TRIPLE B*\n\n` +
+            `👤 Cliente: ${inputNombre.value}\n` +
+            `📱 Contacto: ${formatearTelefono(inputTelefono.value)}\n` +
+            `📍 Dirección: ${inputDireccion.value || 'No especificada'}\n\n` +
+            `🛒 PRODUCTOS:\n` +
+            cart.map(item =>
+                `• ${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}`
+            ).join('\n') +
+            `\n\n💰 TOTAL: $${cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}`;
+
+        const urlWhatsapp = `https://wa.me/${NUMERO_NEGOCIO}?text=${encodeURIComponent(mensaje)}`;
+
+        window.open(urlWhatsapp, '_blank');
+    });
+
+    renderizarResumen();
+    actualizarPreview();
+
+    </script>
+</body>
+</html>
